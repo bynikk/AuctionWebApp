@@ -1,7 +1,18 @@
+using BLL.Interfaces;
+using DAL.Config;
+using DAL.MongoDb;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// DI
+builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
+builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
+
+builder.Services.AddScoped<IDbContext, DbContext>();
 
 var app = builder.Build();
 
@@ -23,5 +34,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
+
+Console.WriteLine("mongo - " + mongoConfig.Ip + ":" + mongoConfig.Port);
 
 app.Run();
