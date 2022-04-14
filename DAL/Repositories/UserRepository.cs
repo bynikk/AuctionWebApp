@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
-    internal class UserRepository : IRepository<User>
+    public class UserRepository : IRepository<User>
     {
         IDbContext context;
         public UserRepository(IDbContext context)

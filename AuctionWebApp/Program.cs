@@ -1,6 +1,10 @@
+using BLL.Entities;
 using BLL.Interfaces;
+using BLL.Services;
+using CatsCRUDApp;
 using DAL.Config;
 using DAL.MongoDb;
+using DAL.Repositories;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,15 @@ builder.Services.AddControllersWithViews();
 // DI
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
+
+builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
+builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
+
+builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
+
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
+
+builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
 builder.Services.AddScoped<IDbContext, DbContext>();
 

@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
-    internal class AuctionItemRepository : IRepository<AuctionItem>
+    public class AuctionItemRepository : IRepository<AuctionItem>
     {
         IDbContext context;
 
