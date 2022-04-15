@@ -18,7 +18,7 @@ namespace DAL.Repositories
 
         public Task Delete(int id)
         {
-            return context.Roles.DeleteOneAsync(c => c.UserId == id);
+            return context.Roles.DeleteOneAsync(c => c.Id == id);
         }
 
         public Task<List<Role>> GetAll()
@@ -28,7 +28,7 @@ namespace DAL.Repositories
 
         public Task Update(Role item)
         {
-            var filter = Builders<Role>.Filter.Eq("UserId", item.UserId);
+            var filter = Builders<Role>.Filter.Eq("UserId", item.Id);
             var update = Builders<Role>.Update
                                           .Set(x => x.Name, item.Name);
 

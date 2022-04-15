@@ -4,8 +4,8 @@ namespace BLL.Entities
 {
     public class Role
     {
-        [BsonElement("UserId")]
-        public int UserId { get; set; }
+        [BsonElement("Id")]
+        public int Id { get; set; }
         [BsonElement("Name")]
         public string Name { get; set; }
         

@@ -3,6 +3,7 @@ using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
+using DAL.Finders;
 using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
+builder.Services.AddScoped<IRoleFinder, RoleFinder>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();

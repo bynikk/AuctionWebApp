@@ -11,14 +11,17 @@ namespace AuctionWebApp.Controllers
         IMapper mapper;
         IUserService userService;
         IUserFinder userFinder;
+        IRoleFinder roleFinder;
         public EnrollmentController(
             IUserService userService,
             IMapper mapper,
-            IUserFinder userFinder)
+            IUserFinder userFinder,
+            IRoleFinder roleFinder)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.userFinder = userFinder;
+            this.roleFinder = roleFinder;
         }
 
         [HttpGet]
@@ -41,7 +44,13 @@ namespace AuctionWebApp.Controllers
                 return View(model);
             }
 
-            userService.Create(mapper.Map<UserViewModel, User>(model));
+            bool result = await CreateUser(model, RoleNames.User);
+
+            if (!result)
+            {
+                ModelState.AddModelError(string.Empty, "bad request");
+                return View(model);
+            }
 
             return View();
         }
@@ -72,5 +81,13 @@ namespace AuctionWebApp.Controllers
         }
 
         // cookie
+        private async Task<bool> CreateUser(UserViewModel userViewModel, string rolename)
+        {
+            Role? role = await roleFinder.GetByName(rolename);
+            if (role == null) return false;
+            userViewModel.RoleId = role.Id;
+            userService.Create(mapper.Map<UserViewModel, User>(userViewModel));
+            return true;
+        }
     }
 }
