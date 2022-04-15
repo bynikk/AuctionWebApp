@@ -3,6 +3,7 @@ using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
+using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
 using Microsoft.Extensions.Options;
@@ -19,9 +20,12 @@ builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
 
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
 
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IUserFinder, UserFinder>();
 
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 

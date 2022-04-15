@@ -16,6 +16,8 @@ namespace DAL.Repositories
             return context.Users.InsertOneAsync(item);
         }
 
+
+        // REFACTOPR THIS
         public Task Delete(int id)
         {
             return context.Users.DeleteOneAsync(c => c.Id == id);
