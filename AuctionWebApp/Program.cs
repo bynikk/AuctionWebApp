@@ -1,8 +1,10 @@
+using AuctionWebApp.Hubs;
 using BLL.Entities;
 using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
+using DAL.Finders;
 using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
@@ -14,12 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSignalR();
 // DI
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
+builder.Services.AddScoped<IAuctionItemFinder, AuctionItemFinder>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
@@ -57,8 +61,12 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auction}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<AuctionHub>("/auction");
+});
 
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
 

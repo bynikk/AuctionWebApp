@@ -7,18 +7,21 @@ using System.Diagnostics;
 
 namespace AuctionWebApp.Controllers
 {
-    public class HomeController : Controller
+    public class AuctionController : Controller
     {
-        private readonly ILogger<HomeController> logger;
+        private readonly ILogger<AuctionController> logger;
         IMapper mapper;
         IAuctionItemService auctionItemService;
+        IAuctionItemFinder auctionItemFinder;
 
-        public HomeController(
-            ILogger<HomeController> logger,
+        public AuctionController(
+            ILogger<AuctionController> logger,
             IMapper mapper,
-            IAuctionItemService auctionItemService
+            IAuctionItemService auctionItemService,
+            IAuctionItemFinder auctionItemFinder
             )
         {
+            this.auctionItemFinder = auctionItemFinder;
             this.logger = logger;
             this.mapper = mapper;
             this.auctionItemService = auctionItemService;
@@ -46,6 +49,13 @@ namespace AuctionWebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Route("/{id}")]
+        public async Task<IActionResult> AuctionItem(int id)
+        {
+            var a = mapper.Map<AuctionItem, AuctionItemViewModel>(await auctionItemFinder.GetById(id));
+            return View(a);
         }
     }
 }
