@@ -35,7 +35,7 @@ namespace DAL.Repositories
                                           .Set(x => x.Name, item.Name)
                                           .Set(x => x.UserName, item.UserName)
                                           .Set(x => x.Password, item.Password)
-                                          .Set(x => x.RoleId, item.RoleId);
+                                          .Set(x => x.RoleName, item.RoleName);
 
             return context.Users.UpdateOneAsync(filter, update);
         }

@@ -14,10 +14,6 @@ namespace CatsCRUDApp
 
             CreateMap<User, UserViewModel>().ForMember(src => src.Password, act => act.Ignore());
             CreateMap<UserViewModel, User>().ForMember("Password", opt => opt.MapFrom(src => StringExtensions.GetHash(src.Password)));
-
-            CreateMap<Role, RoleViewModel>();
-            CreateMap<RoleViewModel, Role>();
-
         }
     }
 }

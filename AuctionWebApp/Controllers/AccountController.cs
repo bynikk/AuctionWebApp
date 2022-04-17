@@ -2,26 +2,26 @@
 using BLL;
 using BLL.Entities;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AuctionWebApp.Controllers
 {
-    public class EnrollmentController : Controller
+    public class AccountController : Controller
     {
         IMapper mapper;
         IUserService userService;
         IUserFinder userFinder;
-        IRoleFinder roleFinder;
-        public EnrollmentController(
+        public AccountController(
             IUserService userService,
             IMapper mapper,
-            IUserFinder userFinder,
-            IRoleFinder roleFinder)
+            IUserFinder userFinder)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.userFinder = userFinder;
-            this.roleFinder = roleFinder;
         }
 
         [HttpGet]
@@ -76,6 +76,7 @@ namespace AuctionWebApp.Controllers
             {
                 return View(model);
             }
+            await Authenticate(user);
             return RedirectToAction("Users", "Admin");
 
         }
@@ -83,11 +84,28 @@ namespace AuctionWebApp.Controllers
         // cookie
         private async Task<bool> CreateUser(UserViewModel userViewModel, string rolename)
         {
-            Role? role = await roleFinder.GetByName(rolename);
-            if (role == null) return false;
-            userViewModel.RoleId = role.Id;
+            userViewModel.RoleName = rolename;
             userService.Create(mapper.Map<UserViewModel, User>(userViewModel));
             return true;
+        }
+
+        private async Task Authenticate(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleName),
+            };
+
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
+            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

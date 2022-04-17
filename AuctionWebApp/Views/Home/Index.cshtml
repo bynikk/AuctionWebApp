@@ -5,6 +5,14 @@
 }
 
 <h1>Index</h1>
+@if (User.Identity is { IsAuthenticated: false })
+{
+    <h1>false</h1>
+}
+else
+{
+    <h1>true</h1>
+}
 
 <p>
     <a asp-action="Create">Create New</a>

@@ -3,10 +3,10 @@ using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
-using DAL.Finders;
 using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,10 +21,6 @@ builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
 
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
-builder.Services.AddScoped<IRoleFinder, RoleFinder>();
-
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IUserFinder, UserFinder>();
@@ -32,6 +28,13 @@ builder.Services.AddScoped<IUserFinder, UserFinder>();
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
 builder.Services.AddScoped<IDbContext, DbContext>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                // CookieAuthenticationOptions
+                options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Enrollment/LoginIn");
+            });
 
 var app = builder.Build();
 
@@ -47,6 +50,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

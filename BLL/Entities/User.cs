@@ -12,8 +12,8 @@ namespace BLL.Entities
         public string UserName { get; set; }
         [BsonElement("Password")]
         public byte[] Password { get; set; }
-        [BsonElement("RoleId")]
-        public int RoleId { get; set; }
+        [BsonElement("RoleName")]
+        public string RoleName { get; set; }
 
     }
 }
