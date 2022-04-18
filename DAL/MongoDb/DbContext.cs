@@ -19,6 +19,5 @@ namespace DAL.MongoDb
         }
         public IMongoCollection<User> Users => database.GetCollection<User>(mongoConfig.UsersCollectionName);
         public IMongoCollection<AuctionItem> AuctionItems => database.GetCollection<AuctionItem>(mongoConfig.AuctionItemsCollectionName);
-        public IMongoCollection<Role> Roles => database.GetCollection<Role>(mongoConfig.RolesCollectionName);
     }
 }

@@ -7,6 +7,5 @@ namespace BLL.Interfaces
     {
         IMongoCollection<AuctionItem> AuctionItems { get; }
         IMongoCollection<User> Users { get; }
-        IMongoCollection<Role> Roles { get; }
     }
 }
