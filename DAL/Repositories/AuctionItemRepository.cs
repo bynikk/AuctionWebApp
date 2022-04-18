@@ -15,6 +15,7 @@ namespace DAL.Repositories
 
         public Task Create(AuctionItem item)
         {
+            if (item.CurrentPrice == 0) item.CurrentPrice = item.StartPrice;
             return context.AuctionItems.InsertOneAsync(item);
         }
 

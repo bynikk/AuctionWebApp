@@ -7,10 +7,5 @@
         public int StartPrice { get; set; }
         public int CurrentPrice { get; set; }
         public DateTime Time { get; set; }
-
-        public AuctionItemViewModel()
-        {
-            this.Time = DateTime.Now;
-        }
     }
 }
