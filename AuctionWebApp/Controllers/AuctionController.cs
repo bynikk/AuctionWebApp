@@ -1,4 +1,5 @@
-﻿using AuctionWebApp.Models;
+﻿using AuctionWebApp.Hubs;
+using AuctionWebApp.Models;
 using AutoMapper;
 using BLL.Entities;
 using BLL.Interfaces;
@@ -25,6 +26,7 @@ namespace AuctionWebApp.Controllers
             this.logger = logger;
             this.mapper = mapper;
             this.auctionItemService = auctionItemService;
+
         }
 
         public async Task<IActionResult> Index()

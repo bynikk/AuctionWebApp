@@ -24,8 +24,13 @@ namespace AuctionWebApp.Hubs
             item.CurrentPrice += int.Parse(bit);
             await auctionItemService.Update(item);
             //
-            await this.Clients.All.SendAsync("ReceiveBit",  bit, id);
+            await this.Clients.All.SendAsync("ReceiveNewTime", item.Time, id);
             await this.Clients.All.SendAsync("ReceiveСurrPrice",  item.CurrentPrice, id);
+        }
+
+        public async Task Init(DateTime dateTime, int id)
+        {
+            await this.Clients.All.SendAsync("ReceiveInitTime", dateTime, id);
         }
     }
 }

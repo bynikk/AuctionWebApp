@@ -15,7 +15,11 @@ connection.on("ReceiveBit", function (bit, id) {
 
 connection.on("ReceiveСurrPrice", function (currPrice, id) {
     if (id != document.getElementById("itemId").value) return;
-    document.getElementById("price").value = currPrice;
+    document.getElementById("price").innerText = currPrice;
+});
+
+connection.on("ReceiveInitTime", function (dateTime, id) {
+    if (id != document.getElementById("itemId").value) return;
 });
 
 connection.on("ReceiveNewTime", function (dateTime, id) {
@@ -24,6 +28,7 @@ connection.on("ReceiveNewTime", function (dateTime, id) {
 
 connection.start().then(function () {
     document.getElementById("bitButton").disabled = false;
+
 }).catch(function (err) {
     return console.error(err.toString());
 });
