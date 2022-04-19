@@ -33,7 +33,7 @@ else
                 @Html.DisplayNameFor(model => model.CurrentPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.DisplayNameFor(model => model.StartTime)
             </th>
             <th></th>
         </tr>
@@ -54,7 +54,7 @@ else
                 @Html.DisplayFor(modelItem => item.CurrentPrice)
             </td>
             <td>
-                @item.Time.ToLocalTime();
+                @item.StartTime.ToLocalTime();
             </td>
             <td>
                 @Html.ActionLink("Details", "AuctionItem", new { id=item.Id })

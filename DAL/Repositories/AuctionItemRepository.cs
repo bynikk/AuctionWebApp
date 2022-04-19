@@ -36,7 +36,7 @@ namespace DAL.Repositories
                                           .Set(x => x.Name, item.Name)
                                           .Set(x => x.CurrentPrice, item.CurrentPrice)
                                           .Set(x => x.StartPrice, item.StartPrice)
-                                          .Set(x => x.Time, item.Time);
+                                          .Set(x => x.StartTime, item.StartTime);
 
             return context.AuctionItems.UpdateOneAsync(filter, update);
         }

@@ -33,8 +33,9 @@ function initializeClock(id, endtime) {
 
     updateClock();
     var timeinterval = setInterval(updateClock, 1000);
+
 }
-function setRemaningTime(date) {
+function setRemaningWaitTime(date) {
     var now = new Date()
     var start = new Date(date)
     if (start >= now) {
@@ -42,8 +43,31 @@ function setRemaningTime(date) {
         button.setAttribute('disabled', true)
         initializeClock('countdown', new Date(start))
     } else {
-        var minutesSpan = clock.querySelector('.minutes');
         const button = document.querySelector('#bitButton')
         button.removeAttribute('disabled')
+    }
+}
+
+function setRemaningLiveTime(date) {
+    var now = new Date()
+    var start = new Date(date)
+    if (start >= now) {
+        initializeClock('countdown', new Date(start))
+    } else {
+        const button = document.querySelector('#bitButton')
+        button.setAttribute('disabled', true)
+    }
+}
+
+function setTime(onWait, OnLive, date) {
+    if (onWait) {
+        setRemaningWaitTime(date)
+    }
+    else if (OnLive) {
+        minutesSpan.innerHTML = "end";
+    }
+    else {
+        // not OnWait, not OnLive =>
+        setRemaningLiveTime(new Date())
     }
 }

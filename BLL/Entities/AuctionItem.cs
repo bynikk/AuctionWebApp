@@ -12,7 +12,18 @@ namespace BLL.Entities
         public int StartPrice { get; set; }
         [BsonElement("CurrentPrice")]
         public int CurrentPrice { get; set; }
-        [BsonElement("Time")]
-        public DateTime Time { get; set; }
+        [BsonElement("StartTime")]
+        public DateTime StartTime { get; set; }
+        [BsonElement("LastBitTime")]
+        public DateTime? LastBitTime { get; set; }
+        [BsonElement("OnLive")]
+        public bool OnLive { get; set; }
+        [BsonElement("OnWait")]
+        public bool OnWait { get; set; }
+        public AuctionItem()
+        {
+            OnWait = true;
+            OnLive = false;
+        }
     }
 }
