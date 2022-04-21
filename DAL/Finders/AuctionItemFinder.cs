@@ -12,18 +12,31 @@ namespace DAL.Finders
             this.dbContext = dbContext;
         }
 
-        public Task<AuctionItem?> GetById(int id)
+        public Task<AuctionItem>? GetById(int id)
         {
             var filter = Builders<AuctionItem>.Filter.Eq("_id", id);
 
             return dbContext.AuctionItems.Find(filter).FirstOrDefaultAsync();
         }
 
-        public Task<AuctionItem?> GetByUsername(string name)
+        public Task<AuctionItem>? GetByName(string name)
         {
             var filter = Builders<AuctionItem>.Filter.Eq("Name", name);
 
             return dbContext.AuctionItems.Find(filter).FirstOrDefaultAsync();
+        }
+        public Task<AuctionItem>? GetByStartTime(DateTime startTime)
+        {
+            var filter = Builders<AuctionItem>.Filter.Lte("StartTime", startTime);
+
+            return dbContext.AuctionItems.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public Task<AuctionItem>? GetElementReadyToLive()
+        {
+            return dbContext.AuctionItems.Find(x => 
+                                            x.StartTime <= DateTime.UtcNow &&
+                                            x.OnLive == false).FirstOrDefaultAsync();
         }
     }
 }

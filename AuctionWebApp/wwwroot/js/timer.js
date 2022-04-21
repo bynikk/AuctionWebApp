@@ -1,4 +1,6 @@
-﻿function getTimeRemaining(endtime) {
+﻿var timeInterval;
+
+function getTimeRemaining(endtime) {
     var t = Date.parse(endtime) - Date.parse(new Date());
     var seconds = Math.floor((t / 1000) % 60);
     var minutes = Math.floor((t / 1000 / 60) % 60);
@@ -27,20 +29,23 @@ function initializeClock(id, endtime) {
         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
         if (t.total <= 0) {
-            clearInterval(timeinterval);
+            clearInterval(timeInterval);
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
         }
     }
 
     updateClock();
-    var timeinterval = setInterval(updateClock, 1000);
-
+    timeInterval = setInterval(updateClock, 1000);
 }
+
 function setRemaningWaitTime(date) {
     var now = new Date()
     var start = new Date(date)
     if (start >= now) {
         const button = document.querySelector('#bitButton')
-        button.setAttribute('disabled', true)
+        button.setAttribute('disabled', false)
+
+        clearInterval(timeInterval);
         initializeClock('countdown', new Date(start))
     } else {
         const button = document.querySelector('#bitButton')
@@ -52,6 +57,7 @@ function setRemaningLiveTime(date) {
     var now = new Date()
     var start = new Date(date)
     if (start >= now) {
+        clearInterval(timeInterval);
         initializeClock('countdown', new Date(start))
     } else {
         const button = document.querySelector('#bitButton')
@@ -59,15 +65,17 @@ function setRemaningLiveTime(date) {
     }
 }
 
-function setTime(onWait, OnLive, date) {
+function setTime(onWait, OnLive) {
+    var onWaitBool = !!onWait;
+    var OnLiveBool = !!OnLive;
     if (onWait) {
-        setRemaningWaitTime(date)
+        setRemaningWaitTime(new Date(document.getElementById("startTime").value))
     }
     else if (OnLive) {
-        minutesSpan.innerHTML = "end";
+        setRemaningLiveTime(new Date(document.getElementById("lastBitTime").value));
     }
     else {
-        // not OnWait, not OnLive =>
-        setRemaningLiveTime(new Date())
+        var minutesSpan = clock.querySelector('.minutes');
+        minutesSpan.innerHTML = "ended";
     }
 }

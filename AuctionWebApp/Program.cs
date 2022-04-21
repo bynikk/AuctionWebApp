@@ -1,3 +1,4 @@
+using AuctionWebApp;
 using AuctionWebApp.Hubs;
 using BLL.Entities;
 using BLL.Interfaces;
@@ -6,9 +7,11 @@ using CatsCRUDApp;
 using DAL.Config;
 using DAL.Finders;
 using DAL.Findres;
+using DAL.Live;
 using DAL.MongoDb;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +35,8 @@ builder.Services.AddScoped<IUserFinder, UserFinder>();
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
 builder.Services.AddScoped<IDbContext, DbContext>();
+
+builder.Services.AddSingleton<ILiveAuctionItemsListner, LiveAuctionItemsListener>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -64,13 +69,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auction}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<AuctionHub>("/auction");
-});
+
+app.MapHub<AuctionHub>("/auction");
 
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
 
 Console.WriteLine("mongo - " + mongoConfig.Ip + ":" + mongoConfig.Port);
+
+var listener = app.Services.GetService(typeof(ILiveAuctionItemsListner)) as LiveAuctionItemsListener;
+
+listener.Listen();
 
 app.Run();

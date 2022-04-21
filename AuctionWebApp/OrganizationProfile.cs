@@ -2,6 +2,7 @@
 using AutoMapper;
 using BLL;
 using BLL.Entities;
+using DAL.Live;
 
 namespace CatsCRUDApp
 {

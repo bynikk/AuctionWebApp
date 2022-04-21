@@ -56,9 +56,9 @@
     <h2>LastBitTime</h2>
     <input  type="text" id="lastBitTime" value="@Model.LastBitTime?.ToString("O")" />
     <h2>OnLive</h2>
-    <input  type="text" id="onLive" value=@(Model.OnLive ? "true" : "false") />
+    <input  type="text" id="onLive" value=@(Model.OnLive) />
     <h2>OnWait</h2>
-    <input  type="text" id="onWait" value=@(Model.OnWait ? "true" : "false") />
+    <input  type="text" id="onWait" value=@(Model.OnWait) />
 </div>
 
 <li id="messagesList">a</li>
@@ -70,10 +70,6 @@
 
 
 <script type="text/javascript">
-    setTime(!!(document.getElementById("onWait").getAttribute("value")),
-            !!(document.getElementById("onLive").getAttribute("value")),
-            document.getElementById("startTime").getAttribute("value"));
-    //setTime(true,
-    //        false,
-    //        document.getElementById("startTime").getAttribute("value"));
+    setTime((document.getElementById("onWait").getAttribute("value")),
+            (document.getElementById("onLive").getAttribute("value")));
 </script>

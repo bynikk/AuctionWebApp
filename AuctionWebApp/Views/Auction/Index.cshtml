@@ -35,6 +35,9 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.StartTime)
             </th>
+            <th>
+                <p>Status</p>
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,6 +58,20 @@ else
             </td>
             <td>
                 @item.StartTime.ToLocalTime();
+            </td>
+            <td>
+                @if (item.OnLive)
+                  {
+                  <p>LIVE</p>
+                  }
+                else if (item.OnWait)
+                  {
+                  <p>Waiting</p>
+                  }
+                  else if (!item.OnWait && !item.OnLive)
+                  {
+                  <p>Ended</p>
+                  }
             </td>
             <td>
                 @Html.ActionLink("Details", "AuctionItem", new { id=item.Id })

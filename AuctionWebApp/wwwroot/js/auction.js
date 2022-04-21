@@ -18,10 +18,16 @@ connection.on("ReceiveCurrPrice", function (currPrice, id) {
 
 connection.on("ReceiveBitTime", function (bitTime, id) {
     if (id != document.getElementById("itemId").value) return;
-
     var lastBitTime = document.getElementById("lastBitTime");
     lastBitTime.setAttribute('value', bitTime)
     setRemaningLiveTime(bitTime);
+});
+connection.on("ReceiveAuctionLiveData", function (id) {
+    if (id != document.getElementById("itemId").value) return;
+    var onlive = document.getElementById("onLive")
+    var onwait = document.getElementById("onWait")
+    onlive.value = true;
+    onwait.value = false;
 });
 
 connection.start().then(function () {
@@ -31,6 +37,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("bitButton").addEventListener("click", function (event) {
+    if (!!(document.getElementById("onWait").nodeValue)) return;
     var bit = document.getElementById("bitInput").value;
     var itemId = document.getElementById("itemId").value;
     connection.invoke("Bit", bit, itemId).catch(function (err) {
