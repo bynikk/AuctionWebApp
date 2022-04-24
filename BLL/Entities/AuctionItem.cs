@@ -8,6 +8,8 @@ namespace BLL.Entities
         public int Id { get; set; }
         [BsonElement("Name")]
         public string Name { get; set; }
+        [BsonElement("Owner")]
+        public string? Owner { get; set; }
         [BsonElement("StartPrice")]
         public int StartPrice { get; set; }
         [BsonElement("CurrentPrice")]

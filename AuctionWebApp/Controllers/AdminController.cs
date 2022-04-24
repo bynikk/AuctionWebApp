@@ -14,10 +14,9 @@ namespace AuctionWebApp.Controllers
             this.userService = userService;
             this.mapper = mapper;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
+        [HttpGet]
+         
         public async Task<IActionResult> Users()
         {
             return View(mapper.Map<List<User>,List<UserViewModel>>(await userService.Get()));

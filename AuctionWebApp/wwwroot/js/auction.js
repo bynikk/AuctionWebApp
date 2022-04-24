@@ -5,28 +5,36 @@ var itemId = null;
 //Disable the send button until connection is established.
 document.getElementById("bitButton").disabled = true;
 
-connection.on("ReceiveCurrPrice", function (currPrice, id) {
-    // изменение html кода (отправка данных в функцию, которая высчитывает и отображает время
+connection.on("ReceiveBitData", function (currPrice, bitTime, owner, id) {
     if (id != document.getElementById("itemId").value) return;
 
     document.getElementById("price").innerText = currPrice;
 
-    var li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    li.textContent = `bit ${bit}$ for item#${id}`;
-});
-
-connection.on("ReceiveBitTime", function (bitTime, id) {
-    if (id != document.getElementById("itemId").value) return;
     var lastBitTime = document.getElementById("lastBitTime");
     lastBitTime.setAttribute('value', bitTime)
     setRemaningLiveTime(bitTime);
+
+    var lastBitTime = document.getElementById("owner");
+    lastBitTime.setAttribute('value', owner)
+
+    var li = document.createElement("li");
+    document.getElementById("messagesList").appendChild(li);
+    li.textContent = `bit ${currPrice}$ for item#${id}`;
 });
+
 connection.on("ReceiveAuctionLiveData", function (id) {
     if (id != document.getElementById("itemId").value) return;
     var onlive = document.getElementById("onLive")
     var onwait = document.getElementById("onWait")
     onlive.value = true;
+    onwait.value = false;
+});
+
+connection.on("ReceiveAuctionEndData", function (id) {
+    if (id != document.getElementById("itemId").value) return;
+    var onlive = document.getElementById("onLive")
+    var onwait = document.getElementById("onWait")
+    onlive.value = false;
     onwait.value = false;
 });
 

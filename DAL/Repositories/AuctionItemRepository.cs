@@ -19,7 +19,7 @@ namespace DAL.Repositories
             return context.AuctionItems.InsertOneAsync(item);
         }
 
-        public Task Delete(int id)
+        public virtual Task Delete(int id)
         {
             return context.AuctionItems.DeleteOneAsync(c => c.Id == id);
         }
@@ -29,7 +29,7 @@ namespace DAL.Repositories
             return context.AuctionItems.Find(_ => true).ToListAsync();
         }
 
-        public Task Update(AuctionItem item)
+        public virtual Task Update(AuctionItem item)
         {
             var filter = Builders<AuctionItem>.Filter.Eq("Id", item.Id);
             var update = Builders<AuctionItem>.Update

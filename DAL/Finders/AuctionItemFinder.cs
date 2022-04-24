@@ -35,8 +35,16 @@ namespace DAL.Finders
         public Task<AuctionItem>? GetElementReadyToLive()
         {
             return dbContext.AuctionItems.Find(x => 
-                                            x.StartTime <= DateTime.UtcNow &&
-                                            x.OnLive == false).FirstOrDefaultAsync();
+                                            DateTime.UtcNow >= x.StartTime &&
+                                            x.OnLive == false &&
+                                            x.OnWait == true).FirstOrDefaultAsync();
+        }
+        public Task<AuctionItem>? GetElementReadyToEnded()
+        {
+            return dbContext.AuctionItems.Find(x =>
+                                            DateTime.UtcNow >= x.LastBitTime &&
+                                            x.OnWait == false &&
+                                            x.OnLive == true).FirstOrDefaultAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace AuctionWebApp.Hubs
 {
@@ -7,13 +8,16 @@ namespace AuctionWebApp.Hubs
     {
         IAuctionItemFinder auctionItemFinder;
         IAuctionItemService auctionItemService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public AuctionHub(
             IAuctionItemFinder auctionItemFinder,
-            IAuctionItemService auctionItemService)
+            IAuctionItemService auctionItemService,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.auctionItemFinder = auctionItemFinder;
             this.auctionItemService = auctionItemService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public CancellationToken Token { get; set; }
@@ -22,23 +26,20 @@ namespace AuctionWebApp.Hubs
         {
             // threading.channel
             var item = await auctionItemFinder.GetById(int.Parse(id));
-            // mb null
-            item.CurrentPrice += int.Parse(bit);
-            item.LastBitTime = DateTime.UtcNow.AddMinutes(5);
 
-            await auctionItemService.Update(item);
-            //
-            await this.Clients.All.SendAsync("ReceiveCurrPrice", item.CurrentPrice, id);
-            await this.Clients.All.SendAsync("ReceiveBitTime", item.LastBitTime, id);
-        }
-
-        public async Task ReveiveAuctionLiveData(string id)
-        {
-            var item = await auctionItemFinder.GetById(int.Parse(id));
-            // mb null
-            item.OnLive = true;
-            item.OnWait = false;
-            await this.Clients.All.SendAsync("ReveiveAuctionLiveData", item.LastBitTime, id);
+            if (!item.OnWait && item.OnLive)
+            {
+                item.CurrentPrice += int.Parse(bit);
+                item.LastBitTime = DateTime.UtcNow.AddMinutes(5);
+                item.Owner = httpContextAccessor.HttpContext.User.Identity.Name.ToString();
+                await auctionItemService.Update(item);
+                //
+                await this.Clients.All.SendAsync("ReceiveBitData", item.CurrentPrice, item.LastBitTime, item.Owner, id);
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }

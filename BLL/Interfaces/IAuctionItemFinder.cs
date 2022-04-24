@@ -8,5 +8,6 @@ namespace BLL.Interfaces
         public Task<AuctionItem>? GetByName(string name);
         public Task<AuctionItem>? GetByStartTime(DateTime startTime);
         public Task<AuctionItem>? GetElementReadyToLive();
+        public Task<AuctionItem>? GetElementReadyToEnded();
     }
 }
