@@ -33,7 +33,10 @@ else
                 @Html.DisplayNameFor(model => model.CurrentPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                <p>Status</p>
             </th>
             <th></th>
         </tr>
@@ -54,7 +57,21 @@ else
                 @Html.DisplayFor(modelItem => item.CurrentPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Time)
+                @item.StartTime.ToLocalTime();
+            </td>
+            <td>
+                @if (item.OnLive)
+                  {
+                  <p>LIVE</p>
+                  }
+                else if (item.OnWait)
+                  {
+                  <p>Waiting</p>
+                  }
+                  else if (!item.OnWait && !item.OnLive)
+                  {
+                  <p>Ended</p>
+                  }
             </td>
             <td>
                 @Html.ActionLink("Details", "AuctionItem", new { id=item.Id })

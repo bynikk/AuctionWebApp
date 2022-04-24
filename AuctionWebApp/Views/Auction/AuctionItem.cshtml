@@ -26,22 +26,59 @@
             @Html.DisplayNameFor(model => model.CurrentPrice)
         </dt>
         <dd class = "col-sm-10">
-            <input type="text" id="price" value="@Model.CurrentPrice"/>
+            <p type="text" id="price">@Model.CurrentPrice</p>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Time)
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dt class = "col-sm-2">
+            @Html.DisplayFor(model => model.StartTime)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Time)
+            @Html.DisplayNameFor(model => model.Owner)
+        </dd>
+        <dd class = "col-sm-10">
+            <input type="text" id="owner" value=@Model.Owner>@Model.Owner</input>
+        </dd>
+        <dd class = "col-sm-10">
+            <div id="countdown" class="countdown">
+            <span class="hours countdown-time"></span>
+            <span class="countdown-text">:</span>
+            <span class="minutes countdown-time"></span>
+            <span class="countdown-text">:</span>
+            <span class="seconds countdown-time"></span>
+            <span class="countdown-text"></span>
+            </div>
         </dd>
     </dl>
 </div>
 <div>
-    <input type="text" id="messageInput" />
-    <input type="button" id="bitButton" value="Bit" />
+    <input type="text" id="bitInput" />
+    <button type="button" id="bitButton" value="Bit">PtnBitButton</button>
     <a asp-action="Index">Back to List</a>
 </div>
 
-<li id="messagesList"></li>
+
+<div class="row">
+    <h2>StartTime</h2>
+    <input  type="text" id="startTime" value="@Model.StartTime.ToString("O")" />
+    <h2>LastBitTime</h2>
+    <input  type="text" id="lastBitTime" value="@Model.LastBitTime?.ToString("O")" />
+    <h2>OnLive</h2>
+    <input  type="text" id="onLive" value=@(Model.OnLive) />
+    <h2>OnWait</h2>
+    <input  type="text" id="onWait" value=@(Model.OnWait) />
+</div>
+
+<li id="messagesList">a</li>
+
 <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script src='~/js/signalr/moment.js'></script>
+<script src='~/js/timer.js'></script>
 <script src="~/js/auction.js"></script>
+
+
+<script type="text/javascript">
+    setTime((document.getElementById("onWait").getAttribute("value")),
+            (document.getElementById("onLive").getAttribute("value")));
+</script>

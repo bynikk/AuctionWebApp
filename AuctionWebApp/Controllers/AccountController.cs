@@ -4,6 +4,7 @@ using BLL.Entities;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,20 +12,21 @@ namespace AuctionWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        IMapper mapper;
-        IUserService userService;
-        IUserFinder userFinder;
+        IMapper _mapper;
+        IUserService _userService;
+        IUserFinder _userFinder;
         public AccountController(
             IUserService userService,
             IMapper mapper,
             IUserFinder userFinder)
         {
-            this.userService = userService;
-            this.mapper = mapper;
-            this.userFinder = userFinder;
+            _userService = userService;
+            _mapper = mapper;
+            _userFinder = userFinder;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult SignUp()
         {
             return View();
@@ -32,11 +34,12 @@ namespace AuctionWebApp.Controllers
 
         // POST: EnrollmentController/SignUp
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp(UserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            User? user = await userFinder.GetByUsername(model.UserName);
+            User? user = await _userFinder.GetByUsername(model.UserName);
             
             if (user != null)
             {
@@ -55,18 +58,19 @@ namespace AuctionWebApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult LoginIn()
         {
             return View();
         }
 
-        // POST: EnrollmentController/LoginIn
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginIn(UserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            User? user = await userFinder.GetByUsername(model.UserName);
+            User? user = await _userFinder.GetByUsername(model.UserName);
             if (user == null)
             {
                 return View(model);
@@ -77,15 +81,21 @@ namespace AuctionWebApp.Controllers
                 return View(model);
             }
             await Authenticate(user);
-            return RedirectToAction("Users", "Admin");
+            return RedirectToAction("Index", "Auction");
 
         }
 
-        // cookie
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return this.RedirectToAction("Index", "Home");
+        }
+
         private async Task<bool> CreateUser(UserViewModel userViewModel, string rolename)
         {
             userViewModel.RoleName = rolename;
-            userService.Create(mapper.Map<UserViewModel, User>(userViewModel));
+            _userService.Create(_mapper.Map<UserViewModel, User>(userViewModel));
             return true;
         }
 
@@ -102,10 +112,5 @@ namespace AuctionWebApp.Controllers
             await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
-        public async Task<IActionResult> Logout()
-        {
-            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return this.RedirectToAction("Index", "Home");
-        }
     }
 }

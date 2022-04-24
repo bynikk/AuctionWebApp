@@ -1,7 +1,9 @@
-﻿using AuctionWebApp.Models;
+﻿using AuctionWebApp.Hubs;
+using AuctionWebApp.Models;
 using AutoMapper;
 using BLL.Entities;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -25,33 +27,40 @@ namespace AuctionWebApp.Controllers
             this.logger = logger;
             this.mapper = mapper;
             this.auctionItemService = auctionItemService;
+
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(mapper.Map<List<AuctionItem>, List<AuctionItemViewModel>>(await auctionItemService.Get()));
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             return View("Create");
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(AuctionItemViewModel auctionItemViewModel)
         {
             if (ModelState.IsValid) await auctionItemService.Create(mapper.Map<AuctionItemViewModel, AuctionItem>(auctionItemViewModel));
             return View("Create");
         }
 
+        [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
         [Route("/{id}")]
+        [Authorize]
         public async Task<IActionResult> AuctionItem(int id)
         {
             var a = mapper.Map<AuctionItem, AuctionItemViewModel>(await auctionItemFinder.GetById(id));
