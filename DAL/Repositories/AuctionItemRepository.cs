@@ -37,6 +37,7 @@ namespace DAL.Repositories
                                           .Set(x => x.CurrentPrice, item.CurrentPrice)
                                           .Set(x => x.StartPrice, item.StartPrice)
                                           .Set(x => x.StartTime, item.StartTime)
+                                          .Set(x => x.Owner, item.Owner)
                                           .Set(x => x.OnLive, item.OnLive)
                                           .Set(x => x.OnWait, item.OnWait)
                                           .Set(x => x.LastBitTime, item.LastBitTime);

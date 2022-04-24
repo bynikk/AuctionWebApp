@@ -1,5 +1,7 @@
 using AuctionWebApp.BackgroundServices;
 using AuctionWebApp.Hubs;
+using AuctionWebApp.Validators;
+using AuctionWebApp.Models;
 using BLL.Entities;
 using BLL.Interfaces;
 using BLL.Interfaces.Cache;
@@ -13,6 +15,8 @@ using DAL.Finders;
 using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 
@@ -29,7 +33,12 @@ builder.Services.AddHostedService<EndItemsListener>();
 builder.Services.AddHostedService<LiveItemsListener>();
 
 builder.Services.AddSignalR();
-// DI
+
+builder.Services.AddMvc()
+    .AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
+
+builder.Services.AddScoped<IValidator<AuctionItemViewModel>, AuctionItemViewModelValidator>();
+
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 

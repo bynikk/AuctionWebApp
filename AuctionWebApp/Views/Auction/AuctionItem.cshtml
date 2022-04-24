@@ -5,12 +5,6 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            <input type="text" id="itemId" value="@Model.Id"/>
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
@@ -31,14 +25,14 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.StartTime)
         </dt>
-        <dt class = "col-sm-2">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.StartTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayNameFor(model => model.Owner)
         </dd>
-        <dd class = "col-sm-10">
-            <input type="text" id="owner" value=@Model.Owner>@Model.Owner</input>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+        <dd class = "col-sm-10 ">
+            <p type="text" id="owner">@Model.Owner</p>
         </dd>
         <dd class = "col-sm-10">
             <div id="countdown" class="countdown">
@@ -53,7 +47,7 @@
     </dl>
 </div>
 <div>
-    <input type="text" id="bitInput" />
+    <input type="text" required pattern="#^[0-9]+$#" id="bitInput" />
     <button type="button" id="bitButton" value="Bit">PtnBitButton</button>
     <a asp-action="Index">Back to List</a>
 </div>
@@ -68,7 +62,9 @@
     <input  type="text" id="onLive" value=@(Model.OnLive) />
     <h2>OnWait</h2>
     <input  type="text" id="onWait" value=@(Model.OnWait) />
+    <input hidden type="text" id="itemId" value="@Model.Id"/>
 </div>
+
 
 <li id="messagesList">a</li>
 

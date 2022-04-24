@@ -15,7 +15,7 @@ connection.on("ReceiveBitData", function (currPrice, bitTime, owner, id) {
     setRemaningLiveTime(bitTime);
 
     var lastBitTime = document.getElementById("owner");
-    lastBitTime.setAttribute('value', owner)
+    lastBitTime.innerText = owner
 
     var li = document.createElement("li");
     document.getElementById("messagesList").appendChild(li);
@@ -36,6 +36,9 @@ connection.on("ReceiveAuctionEndData", function (id) {
     var onwait = document.getElementById("onWait")
     onlive.value = false;
     onwait.value = false;
+
+    document.getElementById("bitButton").remove()
+    document.getElementById("bitInput").remove()
 });
 
 connection.start().then(function () {

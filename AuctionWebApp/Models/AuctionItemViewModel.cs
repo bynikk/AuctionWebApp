@@ -1,5 +1,6 @@
 ﻿namespace AuctionWebApp.Models
 {
+    //[Validator(typeof(LoginViewModelValidator))]
     public class AuctionItemViewModel
     {
         public int Id { get; set; }
