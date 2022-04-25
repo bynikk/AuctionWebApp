@@ -7,27 +7,46 @@ namespace DAL.Repositories
     public class UserRepository : IRepository<User>
     {
         IDbContext context;
+        /// <summary>Initializes a new instance of the <see cref="UserRepository" /> class.</summary>
+        /// <param name="context">The context.</param>
         public UserRepository(IDbContext context)
         {
             this.context = context;
         }
+        /// <summary>Creates the specified item.</summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task Create(User item)
         {
             return context.Users.InsertOneAsync(item);
         }
 
-
-        // REFACTOPR THIS
+        /// <summary>Deletes the specified identifier.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task Delete(int id)
         {
             return context.Users.DeleteOneAsync(c => c.Id == id);
         }
 
+        /// <summary>Gets all.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task<List<User>> GetAll()
         {
-            return context.Users.Find(_ => true).ToListAsync(); ;
+            return context.Users.Find(_ => true).ToListAsync();
         }
 
+        /// <summary>Updates the specified item.</summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task Update(User item)
         {
             var filter = Builders<User>.Filter.Eq("Id", item.Id);

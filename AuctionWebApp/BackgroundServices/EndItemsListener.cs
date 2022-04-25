@@ -44,7 +44,7 @@ public class EndItemsListener : BackgroundService
 
             }
 
-            Task.Delay(1000);
+            await Task.Delay(1000);
         }
     }
 }

@@ -1,18 +1,18 @@
 using AuctionWebApp.BackgroundServices;
 using AuctionWebApp.Hubs;
+using AuctionWebApp.Validators;
+using AuctionWebApp.Models;
 using BLL.Entities;
 using BLL.Interfaces;
-using BLL.Interfaces.Cache;
 using BLL.Services;
 using CatsCRUDApp;
-using DAL.CacheAllocation;
-using DAL.CacheAllocation.Cosumers;
-using DAL.CacheAllocation.Producers;
 using DAL.Config;
 using DAL.Finders;
 using DAL.Findres;
 using DAL.MongoDb;
 using DAL.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 
@@ -29,7 +29,14 @@ builder.Services.AddHostedService<EndItemsListener>();
 builder.Services.AddHostedService<LiveItemsListener>();
 
 builder.Services.AddSignalR();
-// DI
+
+builder.Services.AddTransient<IValidator<AuctionItemViewModel>, AuctionItemViewModelValidator>();
+builder.Services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
+
+builder.Services.AddMvc()
+    .AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
+
+
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 
@@ -47,13 +54,6 @@ builder.Services.AddScoped<IUserFinder, UserFinder>();
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 
 //cache 
-builder.Services.AddSingleton<IChannelProducer<AuctionStreamModel>, ChannelProducer>();
-builder.Services.AddSingleton<IChannelConsumer<AuctionStreamModel>, ChannelConsumer>();
-builder.Services.AddSingleton<IRedisProducer<AuctionItem>, RedisProducer>();
-builder.Services.AddSingleton<IRedisConsumer, RedisConsumer>();
-
-builder.Services.AddSingleton<ICache<AuctionItem>, Cache>();
-builder.Services.AddSingleton<IChannelContext<AuctionStreamModel>, ChannelContext>();
 
 builder.Services.AddScoped<IDbContext, DbContext>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

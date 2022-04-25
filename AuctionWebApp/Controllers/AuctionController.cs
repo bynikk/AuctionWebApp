@@ -3,6 +3,7 @@ using AuctionWebApp.Models;
 using AutoMapper;
 using BLL.Entities;
 using BLL.Interfaces;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -47,7 +48,9 @@ namespace AuctionWebApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(AuctionItemViewModel auctionItemViewModel)
         {
-            if (ModelState.IsValid) await auctionItemService.Create(mapper.Map<AuctionItemViewModel, AuctionItem>(auctionItemViewModel));
+            if (!ModelState.IsValid) return View(auctionItemViewModel);
+                
+            await auctionItemService.Create(mapper.Map<AuctionItemViewModel, AuctionItem>(auctionItemViewModel));
             return View("Create");
         }
 

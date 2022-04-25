@@ -75,7 +75,8 @@ function setTime(onWait, OnLive) {
         setRemaningLiveTime(new Date(document.getElementById("lastBitTime").value));
     }
     else {
-        var minutesSpan = clock.querySelector('.minutes');
-        minutesSpan.innerHTML = "ended";
+        document.getElementById("bitButton").remove()
+        document.getElementById("countdown").remove()
+        document.getElementById("bitInput").remove()
     }
 }

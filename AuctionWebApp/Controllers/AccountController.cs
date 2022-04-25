@@ -36,7 +36,7 @@ namespace AuctionWebApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> SignUp(UserViewModel model)
-        {
+         {
             if (!ModelState.IsValid) return View(model);
 
             User? user = await _userFinder.GetByUsername(model.UserName);
@@ -47,11 +47,13 @@ namespace AuctionWebApp.Controllers
                 return View(model);
             }
 
-            bool result = await CreateUser(model, RoleNames.User);
-
-            if (!result)
+            try
             {
-                ModelState.AddModelError(string.Empty, "bad request");
+                await _userService.Create(user);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"bad request {ex.Message}");
                 return View(model);
             }
 
@@ -76,11 +78,23 @@ namespace AuctionWebApp.Controllers
                 return View(model);
 
             }
-            if (user.Password.Equals(model.Password.GetHash()))
+
+            if (!user.Password.SequenceEqual(model.Password.GetHash()))
             {
+                ModelState.AddModelError("505", "incorrect password");
                 return View(model);
             }
-            await Authenticate(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleName),
+            };
+
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
+            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+
             return RedirectToAction("Index", "Auction");
 
         }
@@ -91,26 +105,5 @@ namespace AuctionWebApp.Controllers
             await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return this.RedirectToAction("Index", "Home");
         }
-
-        private async Task<bool> CreateUser(UserViewModel userViewModel, string rolename)
-        {
-            userViewModel.RoleName = rolename;
-            _userService.Create(_mapper.Map<UserViewModel, User>(userViewModel));
-            return true;
-        }
-
-        private async Task Authenticate(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleName),
-            };
-
-            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
-            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        }
-
     }
 }
