@@ -42,7 +42,7 @@ public class LiveItemsListener : BackgroundService
                 await hubContext.Clients.All.SendAsync("ReceiveAuctionLiveData", item.Id);
 
             }
-            Task.Delay(1000);
+            await Task.Delay(1000);
         }
     }
 

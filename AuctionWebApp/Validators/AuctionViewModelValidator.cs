@@ -9,9 +9,9 @@ namespace AuctionWebApp.Validators
         public AuctionItemViewModelValidator()
         {
             RuleFor(c => c.Id > 0).NotEmpty();
-            RuleFor(c => c.Name).NotEmpty().MaximumLength(20);
+            RuleFor(c => c.Name).NotEmpty().Length(2, 20);
             RuleFor(c => c.StartPrice).NotEmpty().GreaterThan(10);
-            RuleFor(c => c.StartTime).NotEmpty().GreaterThanOrEqualTo(DateTime.UtcNow.AddMinutes(60));
+            RuleFor(c => c.StartTime).NotEmpty().GreaterThanOrEqualTo(d => DateTime.Now.AddMinutes(60)).WithMessage("Start time error"); ;
             RuleFor(c => c.Owner).MaximumLength(20);
             RuleFor(c => c.LastBitTime);
             RuleFor(c => c.CurrentPrice);
