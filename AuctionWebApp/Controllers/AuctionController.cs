@@ -1,9 +1,8 @@
-﻿using AuctionWebApp.Hubs;
-using AuctionWebApp.Models;
+﻿using AuctionWebApp.Models;
 using AutoMapper;
 using BLL.Entities;
-using BLL.Interfaces;
-using FluentValidation.Results;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

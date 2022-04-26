@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionWebApp.Controllers

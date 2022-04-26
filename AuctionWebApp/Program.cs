@@ -3,7 +3,6 @@ using AuctionWebApp.Hubs;
 using AuctionWebApp.Validators;
 using AuctionWebApp.Models;
 using BLL.Entities;
-using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
@@ -15,18 +14,18 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Repositories;
+using BLL.Interfaces.Services;
+using BLL.Interfaces.Database;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Cache distribution
-// Fix UI bug with inputs (owner, id, bit status)
-// Implement validation
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHostedService<EndItemsListener>();
-builder.Services.AddHostedService<LiveItemsListener>();
+//builder.Services.AddHostedService<EndItemsListener>();
+//builder.Services.AddHostedService<LiveItemsListener>();
 
 builder.Services.AddSignalR();
 

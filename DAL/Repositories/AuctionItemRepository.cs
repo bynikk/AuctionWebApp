@@ -1,5 +1,6 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Database;
+using BLL.Interfaces.Repositories;
 using MongoDB.Driver;
 
 namespace DAL.Repositories

@@ -1,5 +1,6 @@
 ﻿using AuctionWebApp.Hubs;
-using BLL.Interfaces;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace AuctionWebApp.BackgroundServices;
@@ -26,25 +27,6 @@ public class LiveItemsListener : BackgroundService
     }
 
     public CancellationToken Token { get; set; }
-
-    public async void Listen()
-    {
-        while (!Token.IsCancellationRequested)
-        {
-            // add lambda fuction
-            var item = await auctionItemFinder.GetElementReadyToLive();
-            if (item != null)
-            {
-
-                item.OnLive = true;
-                item.OnWait = false;
-                await auctionItemService.Update(item);
-                await hubContext.Clients.All.SendAsync("ReceiveAuctionLiveData", item.Id);
-
-            }
-            await Task.Delay(1000);
-        }
-    }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {

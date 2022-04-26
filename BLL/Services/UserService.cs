@@ -1,5 +1,6 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Repositories;
+using BLL.Interfaces.Services;
 
 namespace BLL.Services
 {

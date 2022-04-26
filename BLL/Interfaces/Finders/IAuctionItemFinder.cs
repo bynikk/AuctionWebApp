@@ -1,6 +1,6 @@
 ﻿using BLL.Entities;
 
-namespace BLL.Interfaces
+namespace BLL.Interfaces.Finders
 {
     public interface IAuctionItemFinder
     {

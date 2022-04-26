@@ -1,4 +1,6 @@
-﻿var timeInterval;
+﻿import { StatusRequest as auc} from './auction';
+
+var timeInterval;
 
 function getTimeRemaining(endtime) {
     var t = Date.parse(endtime) - Date.parse(new Date());
@@ -30,7 +32,9 @@ function initializeClock(id, endtime) {
 
         if (t.total <= 0) {
             clearInterval(timeInterval);
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            let id = document.getElementById("itemId").value;
+            auc(id)
         }
     }
 

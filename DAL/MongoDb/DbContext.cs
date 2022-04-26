@@ -1,5 +1,5 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Database;
 using DAL.Config;
 using MongoDB.Driver;
 

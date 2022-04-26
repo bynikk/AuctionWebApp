@@ -1,5 +1,6 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Database;
+using BLL.Interfaces.Finders;
 using MongoDB.Driver;
 
 namespace DAL.Finders

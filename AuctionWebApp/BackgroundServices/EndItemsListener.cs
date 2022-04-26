@@ -1,5 +1,6 @@
 ﻿using AuctionWebApp.Hubs;
-using BLL.Interfaces;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace AuctionWebApp.BackgroundServices;

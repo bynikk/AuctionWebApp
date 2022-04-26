@@ -1,7 +1,7 @@
 ﻿using BLL.Entities;
 using MongoDB.Driver;
 
-namespace BLL.Interfaces
+namespace BLL.Interfaces.Database
 {
     public interface IDbContext
     {

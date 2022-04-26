@@ -7,11 +7,11 @@
 <h1>Index</h1>
 @if (User.Identity is { IsAuthenticated: false })
 {
-    <h1>false</h1>
+    <h1>authorize: false</h1>
 }
 else
 {
-    <h1>true</h1>
+    <h1>authorize: true</h1>
 }
 
 <p>

@@ -1,4 +1,4 @@
-﻿namespace BLL.Interfaces
+﻿namespace BLL.Interfaces.Repositories
 {
     public interface IRepository<T> where T : class
     {
