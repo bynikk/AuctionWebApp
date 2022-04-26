@@ -40,9 +40,6 @@ builder.Services.AddMvc()
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 
-builder.Services.Configure<RedisConfig>(builder.Configuration.GetSection(nameof(RedisConfig)));
-builder.Services.AddSingleton<RedisConfig>(sp => sp.GetRequiredService<IOptions<RedisConfig>>().Value);
-
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
 builder.Services.AddScoped<IAuctionItemFinder, AuctionItemFinder>();
@@ -95,9 +92,5 @@ app.MapHub<AuctionHub>("/auction");
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
 
 Console.WriteLine("mongo - " + mongoConfig.Ip + ":" + mongoConfig.Port);
-
-var redisConfig = app.Services.GetService(typeof(RedisConfig)) as RedisConfig;
-
-Console.WriteLine("redis - " + redisConfig.Ip + ":" + redisConfig.Port);
 
 app.Run();
