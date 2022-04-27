@@ -9,7 +9,7 @@ namespace DAL.Repositories
     {
         IDbContext context;
         /// <summary>Initializes a new instance of the <see cref="UserRepository" /> class.</summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The database context.</param>
         public UserRepository(IDbContext context)
         {
             this.context = context;

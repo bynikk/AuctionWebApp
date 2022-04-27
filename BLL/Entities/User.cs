@@ -2,6 +2,7 @@
 
 namespace BLL.Entities
 {
+    /// <summary>User instance.</summary>
     public class User
     {
         [BsonId]

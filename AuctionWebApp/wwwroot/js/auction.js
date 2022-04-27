@@ -130,13 +130,17 @@ function setRemaningLiveTime(date) {
     }
 }
 
-function setTime(onWait, OnLive) {
+function setTime() {
+    //let id = document.getElementById("itemId").value;
+    //StatusRequest(id)
+    var onWait = document.getElementById("onWait").getAttribute("value");
+    var onLive = document.getElementById("onLive").getAttribute("value");
     var onWaitBool = !!onWait;
-    var OnLiveBool = !!OnLive;
+    var OnLiveBool = !!onLive;
     if (onWait) {
         setRemaningWaitTime(new Date(document.getElementById("startTime").value))
     }
-    else if (OnLive) {
+    else if (onLive) {
         setRemaningLiveTime(new Date(document.getElementById("lastBitTime").value));
     }
     else {

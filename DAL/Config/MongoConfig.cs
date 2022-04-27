@@ -1,5 +1,6 @@
 ﻿namespace DAL.Config;
 
+/// <summary>Class for mongo configuration.</summary>
 public class MongoConfig
 {
     public string Ip { get; set; }
@@ -13,10 +14,5 @@ public class MongoConfig
         {
             return $@"mongodb://{Ip}:{Port}";
         }
-    }
-
-    public MongoConfig()
-    {
-
     }
 }

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-api-deployment
+  labels:
+    app: sample-api
+    env: dev
+    targetApp: api
+spec:
+  selector:
+    matchLabels:
+      app: sample-api-container
+  template:
+    metadata:
+      labels:
+        app: sample-api-container
+    spec:
+      containers:
+        - name: sample-api-container
+          image: auction-web:1.0.2
+          imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "4096Mi"
+              cpu: "500m"
+          env:
+            - name: "SAMPLEAPI_ConnectionStrings_Mongo"
+              value: "sample-mongo-service"
+            - name: "SAMPLEAPI_Port_Mongo"
+              value: "27018"
+          ports:
+            - containerPort: 80

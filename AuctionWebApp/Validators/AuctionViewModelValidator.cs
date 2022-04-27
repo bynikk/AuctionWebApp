@@ -4,6 +4,7 @@ using System;
 
 namespace AuctionWebApp.Validators
 {
+    /// <summary>Provide rules for AuctionItemViewModel validation</summary>
     public class AuctionItemViewModelValidator : AbstractValidator<AuctionItemViewModel>
     {
         public AuctionItemViewModelValidator()

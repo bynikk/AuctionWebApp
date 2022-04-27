@@ -69,8 +69,10 @@ function setRemaningLiveTime(date) {
     }
 }
 
-function setTime(onWait, OnLive) {
+function setTime() {
     var onWaitBool = !!onWait;
+    var onWait = document.getElementById("onWait").getAttribute("value");
+    var onLive = document.getElementById("onLive").getAttribute("value");
     var OnLiveBool = !!OnLive;
     if (onWait) {
         setRemaningWaitTime(new Date(document.getElementById("startTime").value))

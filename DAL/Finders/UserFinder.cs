@@ -5,6 +5,7 @@ using MongoDB.Driver;
 
 namespace DAL.Findres
 {
+    /// <summary>Class for finding user.</summary>
     public class UserFinder : IUserFinder
     {
         IDbContext dbContext;
@@ -13,6 +14,11 @@ namespace DAL.Findres
             this.dbContext = dbContext;
         }
 
+        /// <summary>Gets the user by identifier.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task<User>? GetById(int id)
         {
             var filter = Builders<User>.Filter.Eq("id", id);
@@ -20,6 +26,11 @@ namespace DAL.Findres
             return dbContext.Users.Find(filter).FirstOrDefaultAsync();
         }
 
+        /// <summary>Gets the user by username.</summary>
+        /// <param name="username">The username.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task<User>? GetByUsername(string username)
         {
             var filter = Builders<User>.Filter.Eq("Username", username);

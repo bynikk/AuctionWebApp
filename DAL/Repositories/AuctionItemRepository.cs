@@ -10,7 +10,7 @@ namespace DAL.Repositories
         IDbContext context;
 
         /// <summary>Initializes a new instance of the <see cref="AuctionItemRepository" /> class.</summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The database context.</param>
         public AuctionItemRepository(IDbContext context)
         {
             this.context = context;

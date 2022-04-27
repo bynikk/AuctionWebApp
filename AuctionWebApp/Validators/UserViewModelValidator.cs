@@ -3,6 +3,7 @@ using FluentValidation;
 
 namespace AuctionWebApp.Validators
 {
+    /// <summary>Provide rules for UserViewModel validation</summary>
     public class UserViewModelValidator : AbstractValidator<UserViewModel>
     {
         public UserViewModelValidator()

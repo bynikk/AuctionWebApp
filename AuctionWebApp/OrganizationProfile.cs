@@ -5,6 +5,7 @@ using BLL.Entities;
 
 namespace CatsCRUDApp
 {
+    /// <summary>Class which contains mapper configuration.</summary>
     public class OrganizationProfile : Profile
     {
         public OrganizationProfile()

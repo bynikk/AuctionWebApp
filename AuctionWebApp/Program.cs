@@ -1,4 +1,3 @@
-using AuctionWebApp.BackgroundServices;
 using AuctionWebApp.Hubs;
 using AuctionWebApp.Validators;
 using AuctionWebApp.Models;
@@ -23,9 +22,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-//builder.Services.AddHostedService<EndItemsListener>();
-//builder.Services.AddHostedService<LiveItemsListener>();
 
 builder.Services.AddSignalR();
 
