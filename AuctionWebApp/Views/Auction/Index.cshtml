@@ -2,7 +2,12 @@
 
 @{
     ViewData["Title"] = "Index";
-}
+<button type="button" id="send" value="Bit">SEEEEEEEEEEEEEEEEEEEEEEX</button>}
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/main.js"></script>
+
+<script type="text/javascript">
+</script>
 
 <h1>Index</h1>
 @if (User.Identity is { IsAuthenticated: false })
@@ -27,7 +32,7 @@ else
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartPrice)
+                Time
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CurrentPrice)
@@ -45,13 +50,25 @@ else
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                <p>@(item.Id)</p>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartPrice)
+                @*timer*@
+                <div id=clock@(item.Id) class="countdown">
+                <span class="hours countdown-time"></span>
+                <span class="countdown-text">:</span>
+                <span class="minutes countdown-time"></span>
+                <span class="countdown-text">:</span>
+                <span class="seconds countdown-time"></span>
+                <span class="countdown-text"></span>
+                </div>
+
+                <script defer>
+                    ItemStatusRequest(@(item.Id))
+                </script>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CurrentPrice)
@@ -60,7 +77,6 @@ else
                 @item.StartTime.ToLocalTime();
             </td>
             <td>
-                <p id=clock@(item.Id)>erdf5vtgbyhunjimukmo,i,l</p>
                 @if (item.OnLive)
                   {
                   <p>LIVE</p>
@@ -80,3 +96,4 @@ else
         </tr>}
     </tbody>
 </table>
+

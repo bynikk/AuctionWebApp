@@ -83,6 +83,7 @@ app.MapControllerRoute(
 
 
 app.MapHub<AuctionHub>("/auction");
+app.MapHub<MainHub>("/main");
 
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
 
