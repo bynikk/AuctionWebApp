@@ -48,6 +48,8 @@ namespace AuctionWebApp.Controllers
                 return View(model);
             }
 
+            user = _mapper.Map<UserViewModel, User>(model);
+
             try
             {
                 await _userService.Create(user);

@@ -3,6 +3,15 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/auction").build();
 var itemId = null;
 document.getElementById("bitButton").disabled = true;
 
+async function start() {
+    await connection.start().then(function () {
+        const button = document.querySelector('#bitButton')
+        button.removeAttribute('disabled')
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
+
 connection.on("ReceiveBitData", function (currPrice, bitTime, owner, id) {
     if (id != document.getElementById("itemId").value) return;
 
@@ -38,12 +47,6 @@ connection.on("ReceiveAuctionEndData", function (id) {
 
     document.getElementById("bitButton").remove()
     document.getElementById("bitInput").remove()
-});
-
-connection.start().then(function () {
-    document.getElementById("bitButton").disabled = false;
-}).catch(function (err) {
-    return console.error(err.toString());
 });
 
 document.getElementById("bitButton").addEventListener("click", function (event) {
@@ -126,13 +129,14 @@ function setRemaningLiveTime(date) {
         initializeClock('countdown', new Date(start))
     } else {
         const button = document.querySelector('#bitButton')
-        button.setAttribute('disabled', true)
+        button.removeAttribute('disabled')
     }
 }
 
-function setTime() {
-    //let id = document.getElementById("itemId").value;
-    //StatusRequest(id)
+async function setTime() {
+    await start()
+    let id = document.getElementById("itemId").value;
+    StatusRequest(id)
     var onWait = document.getElementById("onWait").getAttribute("value");
     var onLive = document.getElementById("onLive").getAttribute("value");
     var onWaitBool = !!onWait;
