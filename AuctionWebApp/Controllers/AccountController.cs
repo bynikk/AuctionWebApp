@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BLL;
 using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,8 @@ namespace AuctionWebApp.Controllers
                 ModelState.AddModelError(string.Empty, "username already exist");
                 return View(model);
             }
+
+            user = _mapper.Map<UserViewModel, User>(model);
 
             try
             {

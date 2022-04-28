@@ -1,14 +1,16 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Database;
+using BLL.Interfaces.Repositories;
 using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
+    /// <summary>Provide crud operation in database users collection.</summary>
     public class UserRepository : IRepository<User>
     {
         IDbContext context;
         /// <summary>Initializes a new instance of the <see cref="UserRepository" /> class.</summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The database context.</param>
         public UserRepository(IDbContext context)
         {
             this.context = context;

@@ -1,4 +1,6 @@
-﻿var timeInterval;
+﻿import { StatusRequest as auc} from './auction';
+
+var timeInterval;
 
 function getTimeRemaining(endtime) {
     var t = Date.parse(endtime) - Date.parse(new Date());
@@ -30,7 +32,9 @@ function initializeClock(id, endtime) {
 
         if (t.total <= 0) {
             clearInterval(timeInterval);
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            let id = document.getElementById("itemId").value;
+            auc(id)
         }
     }
 
@@ -65,8 +69,10 @@ function setRemaningLiveTime(date) {
     }
 }
 
-function setTime(onWait, OnLive) {
+function setTime() {
     var onWaitBool = !!onWait;
+    var onWait = document.getElementById("onWait").getAttribute("value");
+    var onLive = document.getElementById("onLive").getAttribute("value");
     var OnLiveBool = !!OnLive;
     if (onWait) {
         setRemaningWaitTime(new Date(document.getElementById("startTime").value))

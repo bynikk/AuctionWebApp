@@ -1,9 +1,7 @@
-using AuctionWebApp.BackgroundServices;
 using AuctionWebApp.Hubs;
 using AuctionWebApp.Validators;
 using AuctionWebApp.Models;
 using BLL.Entities;
-using BLL.Interfaces;
 using BLL.Services;
 using CatsCRUDApp;
 using DAL.Config;
@@ -15,33 +13,28 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
+using BLL.Interfaces.Finders;
+using BLL.Interfaces.Repositories;
+using BLL.Interfaces.Services;
+using BLL.Interfaces.Database;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Cache distribution
-// Fix UI bug with inputs (owner, id, bit status)
-// Implement validation
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHostedService<EndItemsListener>();
-builder.Services.AddHostedService<LiveItemsListener>();
-
-builder.Services.AddSignalR();
-
-builder.Services.AddTransient<IValidator<AuctionItemViewModel>, AuctionItemViewModelValidator>();
-builder.Services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
-
-builder.Services.AddMvc()
-    .AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
-
-
 builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
 builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 
-builder.Services.Configure<RedisConfig>(builder.Configuration.GetSection(nameof(RedisConfig)));
-builder.Services.AddSingleton<RedisConfig>(sp => sp.GetRequiredService<IOptions<RedisConfig>>().Value);
+builder.Services.AddScoped<IDbContext, DbContext>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddAutoMapper(typeof(OrganizationProfile));
+
+builder.Services.AddMvc().AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
+
+builder.Services.AddTransient<IValidator<AuctionItemViewModel>, AuctionItemViewModelValidator>();
+builder.Services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
 
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
@@ -51,12 +44,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IUserFinder, UserFinder>();
 
-builder.Services.AddAutoMapper(typeof(OrganizationProfile));
+builder.Services.AddSignalR();
 
-//cache 
-
-builder.Services.AddScoped<IDbContext, DbContext>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -89,15 +78,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auction}/{action=Index}/{id?}");
 
-
+// SignalR routs.
 app.MapHub<AuctionHub>("/auction");
+app.MapHub<MainHub>("/main");
 
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
-
 Console.WriteLine("mongo - " + mongoConfig.Ip + ":" + mongoConfig.Port);
-
-var redisConfig = app.Services.GetService(typeof(RedisConfig)) as RedisConfig;
-
-Console.WriteLine("redis - " + redisConfig.Ip + ":" + redisConfig.Port);
 
 app.Run();

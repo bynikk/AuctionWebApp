@@ -1,15 +1,18 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Database;
+using BLL.Interfaces.Repositories;
 using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
+
+    /// <summary>Provide crud operation in database AuctionItems collection.</summary>
     public class AuctionItemRepository : IRepository<AuctionItem>
     {
         IDbContext context;
 
         /// <summary>Initializes a new instance of the <see cref="AuctionItemRepository" /> class.</summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The database context.</param>
         public AuctionItemRepository(IDbContext context)
         {
             this.context = context;

@@ -1,5 +1,6 @@
 ﻿using BLL.Entities;
-using BLL.Interfaces;
+using BLL.Interfaces.Repositories;
+using BLL.Interfaces.Services;
 
 namespace BLL.Services
 {
@@ -12,21 +13,38 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task Create(User cat)
+        /// <summary>Creates the specified item.</summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public Task Create(User item)
         {
-            return repository.Create(cat);
+            return repository.Create(item);
         }
 
+        /// <summary>Gets all users from mongo collection.</summary>
+        /// <returns>The collection items.</returns>
         public Task<List<User>> Get()
         {
             return repository.GetAll();
         }
 
-        public Task Update(User auctionItem)
+        /// <summary>Updates specified auction item.</summary>
+        /// <param name="auctionItem">The auction item.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public Task Update(User item)
         {
-            return repository.Update(auctionItem);
+            return repository.Update(item);
         }
 
+        /// <summary>Deletes the User by specified identifier.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public Task Delete(int id)
         {
             return repository.Delete(id);

@@ -1,5 +1,6 @@
 ﻿namespace BLL.Entities
 {
+    /// <summary>View model of class User.</summary>
     public class UserViewModel
     {
         public int? Id { get; set; }
