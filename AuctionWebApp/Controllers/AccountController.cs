@@ -70,6 +70,7 @@ namespace AuctionWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [AllowAnonymous]
         public async Task<IActionResult> LoginIn(UserViewModel model)
         {

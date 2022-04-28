@@ -26,7 +26,6 @@ namespace AuctionWebApp.Hubs
         {
             Console.WriteLine(id);
             //var date = DateTime.UtcNow;
-            //var item = await auctionItemFinder.GetById(int.Parse(id));
 
             //if (!item.OnWait && item.OnLive &&
             //    item.LastBitTime != null && date >= item.LastBitTime)

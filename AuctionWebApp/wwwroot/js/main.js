@@ -1,19 +1,16 @@
 ﻿"use strict";
-var connection = new signalR.HubConnectionBuilder().withUrl("/main").build();
+let connection = new signalR.HubConnectionBuilder().withUrl("/main").build();
 
-async function start() {
-    try {
-        await connection.start();
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-async function ItemStatusRequest(id) {
-    connection.invoke("ItemStatusRequest", id).catch(function (err) {
+function start(arrId) {
+    connection.start().then(function () {
+        arrId.forEach(id => connection.invoke("ItemStatusRequest", id).catch(function (err) {
+            return console.error(err.toString());
+        }))
+        event.preventDefault();
+    }).catch(function (err) {
         return console.error(err.toString());
     });
-}
+};
 
 function initializeItemClock(id, endtime) {
     var clock = document.getElementById(id);
