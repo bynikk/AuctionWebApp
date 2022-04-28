@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = "Index";
-<button type="button" id="send" value="Bit">SEEEEEEEEEEEEEEEEEEEEEEX</button>}
+}
 <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/main.js"></script>
 
 <script type="text/javascript">
+    await start();
 </script>
 
 <h1>Index</h1>
@@ -35,6 +36,9 @@ else
                 Time
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.StartPrice)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CurrentPrice)
             </th>
             <th>
@@ -50,7 +54,7 @@ else
 @foreach (var item in Model) {
         <tr>
             <td>
-                <p>@(item.Id)</p>
+                <p id=@item.Id value=@item.Id>@(item.Id)</p>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -66,9 +70,12 @@ else
                 <span class="countdown-text"></span>
                 </div>
 
-                <script defer>
+                <script defer type="text/javascript">
                     ItemStatusRequest(@(item.Id))
                 </script>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartPrice)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CurrentPrice)

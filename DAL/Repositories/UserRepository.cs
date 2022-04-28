@@ -5,6 +5,7 @@ using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
+    /// <summary>Provide crud operation in database users collection.</summary>
     public class UserRepository : IRepository<User>
     {
         IDbContext context;

@@ -5,6 +5,8 @@ using MongoDB.Driver;
 
 namespace DAL.Repositories
 {
+
+    /// <summary>Provide crud operation in database AuctionItems collection.</summary>
     public class AuctionItemRepository : IRepository<AuctionItem>
     {
         IDbContext context;

@@ -30,7 +30,7 @@ namespace AuctionWebApp.Controllers
 
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(mapper.Map<List<AuctionItem>, List<AuctionItemViewModel>>(await auctionItemService.Get()));

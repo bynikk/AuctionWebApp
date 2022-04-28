@@ -23,17 +23,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSignalR();
+builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
+builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
+
+builder.Services.AddScoped<IDbContext, DbContext>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddAutoMapper(typeof(OrganizationProfile));
+
+builder.Services.AddMvc().AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
 
 builder.Services.AddTransient<IValidator<AuctionItemViewModel>, AuctionItemViewModelValidator>();
 builder.Services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
-
-builder.Services.AddMvc()
-    .AddFluentValidation(fv => fv.ImplicitlyValidateRootCollectionElements = true);
-
-
-builder.Services.Configure<MongoConfig>(builder.Configuration.GetSection(nameof(MongoConfig)));
-builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<MongoConfig>>().Value);
 
 builder.Services.AddScoped<IAuctionItemService, AuctionItemService>();
 builder.Services.AddScoped<IRepository<AuctionItem>, AuctionItemRepository>();
@@ -43,12 +44,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IUserFinder, UserFinder>();
 
-builder.Services.AddAutoMapper(typeof(OrganizationProfile));
+builder.Services.AddSignalR();
 
-//cache 
-
-builder.Services.AddScoped<IDbContext, DbContext>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -81,12 +78,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auction}/{action=Index}/{id?}");
 
-
+// SignalR routs.
 app.MapHub<AuctionHub>("/auction");
 app.MapHub<MainHub>("/main");
 
 var mongoConfig = app.Services.GetService(typeof(MongoConfig)) as MongoConfig;
-
 Console.WriteLine("mongo - " + mongoConfig.Ip + ":" + mongoConfig.Port);
 
 app.Run();

@@ -2,6 +2,7 @@
 
 namespace BLL.Interfaces.Finders
 {
+    /// <summary>Provide find operation in database AuctionItems collection.</summary>
     public interface IAuctionItemFinder
     {
         public Task<AuctionItem>? GetById(int id);
