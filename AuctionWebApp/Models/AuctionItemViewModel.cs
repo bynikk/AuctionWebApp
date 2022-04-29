@@ -1,4 +1,6 @@
-﻿namespace AuctionWebApp.Models
+﻿using BLL.Entities;
+
+namespace AuctionWebApp.Models
 {
 
     /// <summary>View model of class Auction Item.</summary>

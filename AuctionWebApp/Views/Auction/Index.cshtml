@@ -74,18 +74,7 @@ else
                 @item.StartTime.ToLocalTime();
             </td>
             <td>
-                @if (item.OnLive)
-                  {
-                  <p>LIVE</p>
-                  }
-                else if (item.OnWait)
-                  {
-                  <p>Waiting</p>
-                  }
-                  else if (!item.OnWait && !item.OnLive)
-                  {
-                  <p>Ended</p>
-                  }
+                <p id=status@(item.Id)></p>
             </td>
             <td>
                 @Html.ActionLink("Details", "AuctionItem", new { id=item.Id })

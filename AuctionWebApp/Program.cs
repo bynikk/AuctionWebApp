@@ -17,6 +17,7 @@ using BLL.Interfaces.Finders;
 using BLL.Interfaces.Repositories;
 using BLL.Interfaces.Services;
 using BLL.Interfaces.Database;
+using MongoDB.Bson.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
