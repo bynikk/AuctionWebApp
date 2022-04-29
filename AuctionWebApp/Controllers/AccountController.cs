@@ -38,29 +38,25 @@ namespace AuctionWebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SignUp(UserViewModel model)
          {
-            if (!ModelState.IsValid) return View(model);
-
-            User? user = await _userFinder.GetByUsername(model.UserName);
-            
-            if (user != null)
-            {
-                ModelState.AddModelError(string.Empty, "username already exist");
-                return View(model);
-            }
-
-            user = _mapper.Map<UserViewModel, User>(model);
-
             try
             {
+                if (!ModelState.IsValid) return View(model);
+
+                User? user = await _userFinder.GetByUsername(model.UserName);
+
+                if (user != null) throw new ArgumentException("Username already exist.");
+
+                model.RoleName = RoleNames.User;
+                user = _mapper.Map<UserViewModel, User>(model);
                 await _userService.Create(user);
+
+                return View();
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, $"bad request {ex.Message}");
+                ModelState.AddModelError("500", ex.Message);
                 return View(model);
             }
-
-            return View();
         }
 
         [AllowAnonymous]
@@ -74,33 +70,33 @@ namespace AuctionWebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginIn(UserViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
-
-            User? user = await _userFinder.GetByUsername(model.UserName);
-            if (user == null)
+            try
             {
-                return View(model);
+                if (!ModelState.IsValid) return View(model);
 
+                User? user = await _userFinder.GetByUsername(model.UserName);
+                if (user == null) throw new ArgumentException($"Invalid {nameof(user.UserName)}");
+
+                if (!user.Password.SequenceEqual(model.Password.GetHash())) throw new ArgumentException($"Invalid {nameof(model.Password)}");
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleName),
+                };
+
+                var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
+                await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+
+                return RedirectToAction("Index", "Auction");
             }
-
-            if (!user.Password.SequenceEqual(model.Password.GetHash()))
+            catch (Exception ex)
             {
-                ModelState.AddModelError("505", "incorrect password");
+
+                ModelState.AddModelError("500", ex.Message);
                 return View(model);
             }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleName),
-            };
-
-            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
-            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-
-            return RedirectToAction("Index", "Auction");
-
         }
 
         [Authorize]
