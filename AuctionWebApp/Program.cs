@@ -17,7 +17,7 @@ using BLL.Interfaces.Finders;
 using BLL.Interfaces.Repositories;
 using BLL.Interfaces.Services;
 using BLL.Interfaces.Database;
-using MongoDB.Bson.Serialization;
+using DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,8 @@ builder.Services.AddSingleton<MongoConfig>(sp => sp.GetRequiredService<IOptions<
 
 builder.Services.AddScoped<IDbContext, DbContext>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IIntIdGenerator<AuctionItem>, IntIdGeneratorAuctionItem>();
+builder.Services.AddSingleton<IIntIdGenerator<User>, IntIdGeneratorUser>();
 
 builder.Services.AddAutoMapper(typeof(OrganizationProfile));
 

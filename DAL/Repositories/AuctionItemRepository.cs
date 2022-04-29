@@ -12,12 +12,14 @@ namespace DAL.Repositories
     public class AuctionItemRepository : IRepository<AuctionItem>
     {
         IDbContext context;
+        IIntIdGenerator<AuctionItem> intIdGenerator;
 
         /// <summary>Initializes a new instance of the <see cref="AuctionItemRepository" /> class.</summary>
         /// <param name="context">The database context.</param>
-        public AuctionItemRepository(IDbContext context)
+        public AuctionItemRepository(IDbContext context, IIntIdGenerator<AuctionItem> intIdGenerator)
         {
             this.context = context;
+            this.intIdGenerator = intIdGenerator;
         }
 
         /// <summary>Creates the specified item.</summary>
@@ -27,6 +29,8 @@ namespace DAL.Repositories
         /// </returns>
         public Task Create(AuctionItem item)
         {
+            item.Id = intIdGenerator.GenerateId(context.AuctionItems);
+
             if (item.CurrentPrice == 0) item.CurrentPrice = item.StartPrice;
             return context.AuctionItems.InsertOneAsync(item);
         }

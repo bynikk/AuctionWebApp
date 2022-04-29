@@ -12,8 +12,7 @@ namespace AuctionWebApp.Hubs
 
         public MainHub(
             IAuctionItemFinder auctionItemFinder,
-            IAuctionItemService auctionItemService,
-            IHttpContextAccessor httpContextAccessor)
+            IAuctionItemService auctionItemService)
         {
             this.auctionItemFinder = auctionItemFinder;
             this.auctionItemService = auctionItemService;
@@ -38,7 +37,7 @@ namespace AuctionWebApp.Hubs
                 if (item.OnWait && !item.OnLive)
                 {
                     // wait
-                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "OnWait", item.StartTime);
+                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Waiting", item.StartTime);
                 }
                 else if(!item.OnWait && !item.OnLive)
                 {
@@ -49,7 +48,7 @@ namespace AuctionWebApp.Hubs
                          item.LastBitTime != null)
                 {
                     // live
-                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "OnLive", item.LastBitTime?.ToString("O"));
+                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Live", item.LastBitTime?.ToString("O"));
                 }
                 else if (!item.OnWait && item.OnLive
                          && item.LastBitTime == null)

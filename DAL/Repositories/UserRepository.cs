@@ -9,10 +9,12 @@ namespace DAL.Repositories
     public class UserRepository : IRepository<User>
     {
         IDbContext context;
+        IIntIdGenerator<User> intIdGenerator;
         /// <summary>Initializes a new instance of the <see cref="UserRepository" /> class.</summary>
         /// <param name="context">The database context.</param>
-        public UserRepository(IDbContext context)
+        public UserRepository(IDbContext context, IIntIdGenerator<User> intIdGenerator)
         {
+            this.intIdGenerator = intIdGenerator;
             this.context = context;
         }
         /// <summary>Creates the specified item.</summary>
@@ -22,6 +24,7 @@ namespace DAL.Repositories
         /// </returns>
         public Task Create(User item)
         {
+            item.Id = intIdGenerator.GenerateId(context.Users);
             return context.Users.InsertOneAsync(item);
         }
 
