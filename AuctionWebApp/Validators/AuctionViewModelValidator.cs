@@ -17,7 +17,7 @@ namespace AuctionWebApp.Validators
 
         public AuctionItemViewModelValidator()
         {
-            RuleFor(c => c.Id > minId).NotEmpty();
+            RuleFor(c => c.Id > minId);
             RuleFor(c => c.Name).NotEmpty().Length(minNameCharCount, maxNameCharCount);
             RuleFor(c => c.StartPrice).NotEmpty().GreaterThan(minStartPrice);
             RuleFor(c => c.StartTime).NotEmpty();

@@ -5,7 +5,6 @@ namespace BLL.Entities
     /// <summary>Auction item instance which represent the lot abstraction.</summary>
     public class AuctionItem
     {
-        [BsonId]
         public int Id { get; set; }
 
         [BsonElement("Name")]

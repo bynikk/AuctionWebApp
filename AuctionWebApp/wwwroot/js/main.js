@@ -1,22 +1,48 @@
 ﻿"use strict";
-var connection = new signalR.HubConnectionBuilder().withUrl("/main").build();
+let connection = new signalR.HubConnectionBuilder().withUrl("/main").build();
 
-async function start() {
-    try {
-        await connection.start();
-    } catch (err) {
-        console.log(err);
-    }
+function start(arrId) {
+    connection.start().then(function () {
+        arrId.forEach(id => connection.invoke("ItemStatusRequest", id).catch(function (err) {
+            return console.error(err.toString());
+        }))
+        event.preventDefault();
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
 };
 
-async function ItemStatusRequest(id) {
-    connection.invoke("ItemStatusRequest", id).catch(function (err) {
+function getTimeRemaining(endtime) {
+    var t = Date.parse(endtime) - Date.parse(new Date());
+    var seconds = Math.floor((t / 1000) % 60);
+    var minutes = Math.floor((t / 1000 / 60) % 60);
+    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+
+
+    return {
+        'total': t,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds
+    };
+}
+
+function ItemStatusUpdateRequest(id) {
+    connection.invoke("ItemStatusUpdateRequest", id).catch(function (err) {
         return console.error(err.toString());
     });
 }
 
+connection.on("ReceiveItemTimer", function (id, status, endtime) {
+    var statusid = "status"+id
+    document.getElementById(statusid).innerText = status;
+    if (status != "Ended" && status != "Waiting first bid") {
+        initializeItemClock(id, endtime)
+    }
+});
+
 function initializeItemClock(id, endtime) {
-    var clock = document.getElementById(id);
+    var clock = document.getElementById("clock" + id);
     var hoursSpan = clock.querySelector('.hours');
     var minutesSpan = clock.querySelector('.minutes');
     var secondsSpan = clock.querySelector('.seconds');
@@ -29,7 +55,7 @@ function initializeItemClock(id, endtime) {
         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
         if (t.total <= 0) {
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ItemStatusUpdateRequest(id.toString());
         }
     }
 

@@ -3,12 +3,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
-<script src="~/js/main.js"></script>
-
-<script type="text/javascript">
-    await start();
-</script>
 
 <h1>Index</h1>
 @if (User.Identity is { IsAuthenticated: false })
@@ -69,10 +63,6 @@ else
                 <span class="seconds countdown-time"></span>
                 <span class="countdown-text"></span>
                 </div>
-
-                <script defer type="text/javascript">
-                    ItemStatusRequest(@(item.Id))
-                </script>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartPrice)
@@ -84,18 +74,7 @@ else
                 @item.StartTime.ToLocalTime();
             </td>
             <td>
-                @if (item.OnLive)
-                  {
-                  <p>LIVE</p>
-                  }
-                else if (item.OnWait)
-                  {
-                  <p>Waiting</p>
-                  }
-                  else if (!item.OnWait && !item.OnLive)
-                  {
-                  <p>Ended</p>
-                  }
+                <p id=status@(item.Id)></p>
             </td>
             <td>
                 @Html.ActionLink("Details", "AuctionItem", new { id=item.Id })
@@ -104,3 +83,9 @@ else
     </tbody>
 </table>
 
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/main.js"></script>
+
+<script> 
+    start(@Json.Serialize(Model.Select(x => x.Id.ToString()).ToArray()));
+</script>

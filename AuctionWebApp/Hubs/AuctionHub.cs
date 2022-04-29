@@ -73,7 +73,7 @@ namespace AuctionWebApp.Hubs
                 else if (item.OnWait && !item.OnLive &&
                          date >= item.StartTime)
                 {
-                    // go live
+                    // live
                     item.OnLive = true;
                     item.OnWait = false;
                     await auctionItemService.Update(item);
