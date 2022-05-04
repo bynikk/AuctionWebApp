@@ -46,7 +46,7 @@ namespace AuctionWebApp.Controllers
 
                 if (user != null) throw new ArgumentException("Username already exist.");
 
-                model.RoleName = RoleNames.User;
+                model.RoleName = RoleNames.Admin;
                 user = _mapper.Map<UserViewModel, User>(model);
                 await _userService.Create(user);
 
