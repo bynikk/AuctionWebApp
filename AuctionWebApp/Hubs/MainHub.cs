@@ -39,22 +39,21 @@ namespace AuctionWebApp.Hubs
                     // wait
                     await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Waiting", item.StartTime);
                 }
-                else if(!item.OnWait && !item.OnLive)
+                else if(!item.OnLive)
                 {
                     // end
                     await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Ended", DateTime.Now.ToString("O"));
                 }
-                else if (!item.OnWait && item.OnLive &&
+                else if (item.OnLive &&
                          item.LastBitTime != null)
                 {
                     // live
                     await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Live", item.LastBitTime?.ToString("O"));
                 }
-                else if (!item.OnWait && item.OnLive
-                         && item.LastBitTime == null)
+                else if (item.OnLive)
                 {
                     // live [wait for first bid]
-                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Waiting first bid", DateTime.Now.ToString("O"));
+                    await this.Clients.All.SendAsync("ReceiveItemTimer", item.Id, "Waiting first bid", item.StartTime);
                 }
                 else
                 {

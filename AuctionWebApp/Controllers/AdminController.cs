@@ -14,7 +14,11 @@ namespace AuctionWebApp.Controllers
             this.userService = userService;
             this.mapper = mapper;
         }
-        
+
+        /// <summary>Provide list of all users.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         [HttpGet]
          
         public async Task<IActionResult> Users()

@@ -11,26 +11,27 @@ namespace AuctionWebApp.Controllers
 {
     public class AuctionController : Controller
     {
-        private readonly ILogger<AuctionController> logger;
         IMapper mapper;
         IAuctionItemService auctionItemService;
         IAuctionItemFinder auctionItemFinder;
 
         public AuctionController(
-            ILogger<AuctionController> logger,
             IMapper mapper,
             IAuctionItemService auctionItemService,
             IAuctionItemFinder auctionItemFinder
             )
         {
             this.auctionItemFinder = auctionItemFinder;
-            this.logger = logger;
             this.mapper = mapper;
             this.auctionItemService = auctionItemService;
 
         }
 
         //[Authorize]
+        /// <summary>Provide list of all auction items.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public async Task<IActionResult> Index()
         {
             return View(mapper.Map<List<AuctionItem>, List<AuctionItemViewModel>>(await auctionItemService.Get()));
@@ -43,6 +44,11 @@ namespace AuctionWebApp.Controllers
             return View("Create");
         }
 
+        /// <summary>Creates the specified auction item by view model.</summary>
+        /// <param name="auctionItemViewModel">The auction item view model from UI.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(AuctionItemViewModel auctionItemViewModel)
@@ -61,6 +67,11 @@ namespace AuctionWebApp.Controllers
         }
 
 
+        /// <summary>Return view of instance of auction item by id.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         [Route("/{id}")]
         [Authorize]
         public async Task<IActionResult> AuctionItem(int id)

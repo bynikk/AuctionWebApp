@@ -16,6 +16,10 @@ namespace AuctionWebApp.Controllers
         IMapper _mapper;
         IUserService _userService;
         IUserFinder _userFinder;
+        /// <summary>Initializes a new instance of the <see cref="AccountController" /> class.</summary>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="userFinder">The user finder.</param>
         public AccountController(
             IUserService userService,
             IMapper mapper,
@@ -34,6 +38,12 @@ namespace AuctionWebApp.Controllers
         }
 
         // POST: EnrollmentController/SignUp
+        /// <summary>Create new user by ViewModel.</summary>
+        /// <param name="model">The view model from UI.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        /// <exception cref="System.ArgumentException">Username already exist.</exception>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> SignUp(UserViewModel model)
@@ -59,12 +69,21 @@ namespace AuctionWebApp.Controllers
             }
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult LoginIn()
         {
             return View();
         }
 
+        /// <summary>Authorize user by cookie creation.</summary>
+        /// <param name="model">The view model from UI.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        /// <exception cref="System.ArgumentException">Invalid {nameof(user.UserName)}
+        /// or
+        /// Invalid {nameof(model.Password)}</exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -99,6 +118,10 @@ namespace AuctionWebApp.Controllers
             }
         }
 
+        /// <summary>Delete cookie value from session.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         [Authorize]
         public async Task<IActionResult> Logout()
         {

@@ -36,7 +36,7 @@ function ItemStatusUpdateRequest(id) {
 connection.on("ReceiveItemTimer", function (id, status, endtime) {
     var statusid = "status"+id
     document.getElementById(statusid).innerText = status;
-    if (status != "Ended" && status != "Waiting first bid") {
+    if (status != "Ended") {
         initializeItemClock(id, endtime)
     }
 });
