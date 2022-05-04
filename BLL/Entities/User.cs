@@ -6,7 +6,7 @@ namespace BLL.Entities
     public class User
     {
         [BsonId]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         [BsonElement("Name")]
         public string Name { get; set; }
         [BsonElement("Username")]

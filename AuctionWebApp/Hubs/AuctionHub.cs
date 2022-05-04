@@ -29,11 +29,14 @@ namespace AuctionWebApp.Hubs
         {
             try
             {
+                int bitValue = int.Parse(bit);
+                if (bitValue < 10) throw new ArgumentException(nameof(bit));
+
                 var item = await auctionItemFinder.GetById(int.Parse(id));
             
                 if (!item.OnWait && item.OnLive)
                 {
-                    item.CurrentPrice += int.Parse(bit);
+                    item.CurrentPrice += bitValue;
                     item.LastBitTime = DateTime.UtcNow.AddSeconds(30);
                     item.Owner = httpContextAccessor.HttpContext.User.Identity.Name.ToString();
                     await auctionItemService.Update(item);
